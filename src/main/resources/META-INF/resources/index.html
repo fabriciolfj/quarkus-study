@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chatbot</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="chat-container"> <!--1-->
+    <div class="chat-box" id="chat-box"></div>
+    <div class="input-container">
+        <input type="text" id="message" placeholder="Type a message...">
+        <div class="spinner" id="spinner"></div>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080/chat'); <!--2-->
+    const chatBox = document.getElementById('chat-box');
+    const messageInput = document.getElementById('message');
+    const spinner = document.getElementById('spinner');
+
+    ws.onmessage = function(event) { <!--3-->
+        appendMessage('Bot: ' + event.data, 'left');
+        spinner.style.display = 'none';
+    };
+
+    function sendMessage() { <!--4-->
+        const message = messageInput.value.trim();
+        if (message === '') return;
+
+        appendMessage('You: ' + message, 'right');
+        messageInput.value = '';
+        spinner.style.display = 'inline-block';
+
+        ws.send(message);
+    }
+
+    function appendMessage(text, alignment) {
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = text;
+        msgDiv.style.textAlign = alignment;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+</body>
+</html>
