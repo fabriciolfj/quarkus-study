@@ -75,8 +75,24 @@
             <artifactId>quarkus-langchain4j-anthropic</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-rest-data-panache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-redis-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.quarkiverse.flow</groupId>
             <artifactId>quarkus-flow-langchain4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.langchain4j</groupId>
+            <artifactId>quarkus-langchain4j-memory-store-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
