@@ -17,7 +17,7 @@ public class MoviesParserService {
 
     @SuppressWarnings("deprecation")
     public List<MovieDto> loadMoviesGreaterThanReleaseDate(int releaseYear) {
-        String location = "./protected/wiki_movie_plots_deduped.csv";
+        String location = "./src/main/protected/wiki_movie_plots_deduped.csv";
 
         try (Reader reader = new FileReader(location)) {
             try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {

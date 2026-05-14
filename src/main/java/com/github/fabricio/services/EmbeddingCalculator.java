@@ -4,11 +4,13 @@ import com.github.fabricio.buscasemantica.MovieDto;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 @ApplicationScoped
 public class EmbeddingCalculator {
 
     @Inject
+    @Named("onnx")
     EmbeddingModel embeddingModel;
 
     public float[] calculateVector(final MovieDto movieDto) {

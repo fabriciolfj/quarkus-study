@@ -78,7 +78,6 @@
             <groupId>io.quarkiverse.langchain4j</groupId>
             <artifactId>quarkus-langchain4j-core</artifactId>
         </dependency>
-        <!-- Source: https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-embeddings -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-embeddings</artifactId>
