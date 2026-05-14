@@ -1,0 +1,46 @@
+package com.github.fabricio.services;
+
+import com.github.fabricio.entities.Movie;
+import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
+import io.quarkus.runtime.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.random.RandomGenerator;
+
+@ApplicationScoped
+public class StartSertDataService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StartSertDataService.class);
+
+    private static final RandomGenerator RANDOM_GENERATOR = RandomGenerator.getDefault();
+
+    @Inject
+    MoviesParserService moviesParse;
+
+    @Inject
+    EmbeddingCalculator embeddingCalculator;
+
+    @Startup
+    @Transactional
+    @TransactionConfiguration(timeout = 500)
+    public void startup() {
+        LOGGER.info("iniciou");
+        var movieDtos = moviesParse.loadMoviesGreaterThanReleaseDate(2007);
+
+        movieDtos.stream()
+                .map(m -> {
+                    float[] vector = embeddingCalculator.calculateVector(m);
+                    return new Movie(m.title(), m.director(), m.plot(), calculateRating(), vector);
+                }).forEach(movie -> movie.persist());
+
+        LOGGER.info("fim");
+    }
+
+    private static double calculateRating() {
+        return RANDOM_GENERATOR.nextDouble();
+    }
+}
