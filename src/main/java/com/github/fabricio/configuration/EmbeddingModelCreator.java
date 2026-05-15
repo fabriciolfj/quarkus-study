@@ -1,8 +1,9 @@
-package com.github.fabricio.services;
+package com.github.fabricio.configuration;
 
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.OnnxEmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.PoolingMode;
+import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
@@ -26,5 +27,16 @@ public class EmbeddingModelCreator {
                 .toAbsolutePath().toString();
 
         return new OnnxEmbeddingModel(model, tokenizer, poolingMode);
+    }
+
+    @Produces
+    @Named("ollama")
+    public EmbeddingModel createOllama() {
+        EmbeddingModel embeddingModel = OllamaEmbeddingModel.builder()
+                .baseUrl("http://localhost:11434")
+                .modelName("nomic-embed-text")
+                .build();
+
+        return embeddingModel;
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @NamedNativeQuery(name = "suggestMovies",
 resultClass = Movie.class,
-query = "SELECT * FROM public.movie WHERE rating > 4.5 ORDER BY embedded <-> cast(:vector as vector) LIMIT 3")
+query = "SELECT * FROM public.movie ORDER BY embedded <-> cast(:vector as vector) LIMIT 3")
 public class Movie extends PanacheEntity {
 
     @Column(length = 512)

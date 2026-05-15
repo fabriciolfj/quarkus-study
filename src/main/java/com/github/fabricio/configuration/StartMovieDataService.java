@@ -1,6 +1,8 @@
-package com.github.fabricio.services;
+package com.github.fabricio.configuration;
 
 import com.github.fabricio.entities.Movie;
+import com.github.fabricio.services.EmbeddingCalculator;
+import com.github.fabricio.services.MoviesParserService;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +28,7 @@ public class StartMovieDataService {
     @Inject
     EmbeddingCalculator embeddingCalculator;
 
-    @Transactional
+    /*@Transactional
     @TransactionConfiguration(timeout = 500)
     public void onStart(@Observes StartupEvent event) {
         LOGGER.info("iniciou");
@@ -42,7 +44,7 @@ public class StartMovieDataService {
         entities.forEach(movie -> movie.persist());
 
         LOGGER.info("fim");
-    }
+    }*/
 
     private static double calculateRating() {
         return RANDOM_GENERATOR.nextDouble();

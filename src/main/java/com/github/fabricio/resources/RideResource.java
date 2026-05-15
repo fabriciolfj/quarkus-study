@@ -1,24 +1,43 @@
 package com.github.fabricio.resources;
 
+import com.github.fabricio.configuration.DocumentFromText;
 import com.github.fabricio.entities.Ride;
 import com.github.fabricio.repositories.RideRepository;
 import com.github.fabricio.services.ThemeParkChatBot;
 import com.github.fabricio.services.WaitingTime;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
 import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 
+import java.nio.file.Paths;
+
+import static dev.langchain4j.data.document.splitter.DocumentSplitters.recursive;
+
 @Path("/ride")
 public class RideResource {
+
+    @Inject
+    @Named("ollama")
+    EmbeddingModel embeddingModel;
 
     @Inject
     RideRepository rideRepository;
 
     @Inject
     WaitingTime waitingTime;
+    @Inject
+    DocumentFromText documentFromText;
+    @Inject
+    ChromaEmbeddingStore embeddingStore;
 
     @Startup
     @Transactional
@@ -55,6 +74,20 @@ public class RideResource {
     @GET
     @Path("/chat/waiting/{userid}")
     public String askForWaitingTime(@PathParam("userid") Integer userId) {
-        return  this.themeParkChatBot.chat(userId, "qual o tempo de espera para o dragon fun?");
+        return  this.themeParkChatBot.chat(userId, "como funciona a torre do pavor?");
+    }
+
+    public void ingest(@Observes StartupEvent startupEvent) {
+        var documents = documentFromText.createDocuments(Paths.get("./rides"));
+
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+                .builder()
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .documentSplitter(recursive(300, 30))
+                .build();
+
+        ingestor.ingest(documents);
+        System.out.println("ingeriu");
     }
 }
