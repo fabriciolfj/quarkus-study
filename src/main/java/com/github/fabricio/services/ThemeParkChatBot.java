@@ -1,6 +1,7 @@
 package com.github.fabricio.services;
 
 import com.github.fabricio.configuration.RidesRetrievalAugmentor;
+import com.github.fabricio.queryrouter.RidesRetrievalArgumentor;
 import com.github.fabricio.repositories.RideRepository;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
@@ -11,7 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 
 
-@RegisterAiService(retrievalAugmentor = RidesRetrievalAugmentor.class)
+@RegisterAiService(retrievalAugmentor = RidesRetrievalArgumentor.class)
 @ApplicationScoped
 public interface ThemeParkChatBot {
 
@@ -38,4 +39,20 @@ public interface ThemeParkChatBot {
         """)
     @ToolBox({RideRepository.class, WaitingTime.class})
     String chat(@MemoryId int userId, final String question);
+
+    @SystemMessage("""
+        What flight options do I have to travel to the theme park?
+        
+        If you need the location of the theme park to answer a question,
+        the theme park is located at Barcelona.
+        
+        Don't give information that it is wrong.
+        """)
+    @UserMessage("""
+        The theme park is located at Barcelona.
+        
+        ...
+        """)
+    @ToolBox({RideRepository.class, WaitingTime.class})
+    String chat(String question);
 }

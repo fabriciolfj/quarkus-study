@@ -68,7 +68,7 @@ public class RideResource {
     @GET
     @Path("/chat/best/{userid}")
     public String askForTheBest(@PathParam("userid") Integer userId) {
-        return this.themeParkChatBot.chat(userId,"qual o melhor brinquedo no momento?");
+        return this.themeParkChatBot.chat("quais voos tenho como opcao para viajar a um park tematico?");
     }
 
     @GET
