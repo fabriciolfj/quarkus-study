@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import org.jboss.resteasy.reactive.RestQuery;
 
 import java.nio.file.Paths;
 
@@ -26,7 +27,7 @@ import static dev.langchain4j.data.document.splitter.DocumentSplitters.recursive
 public class RideResource {
 
     @Inject
-    @Named("ollama")
+    @Named("ollamaEmb")
     EmbeddingModel embeddingModel;
 
     @Inject
@@ -67,8 +68,8 @@ public class RideResource {
 
     @GET
     @Path("/chat/best/{userid}")
-    public String askForTheBest(@PathParam("userid") Integer userId) {
-        return this.themeParkChatBot.chat("quais voos tenho como opcao para viajar a um park tematico?");
+    public String askForTheBest(@PathParam("userid") Integer userId, @RestQuery("mensagem") String message) {
+        return this.themeParkChatBot.chat(message);
     }
 
     @GET

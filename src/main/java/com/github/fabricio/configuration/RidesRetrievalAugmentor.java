@@ -16,7 +16,7 @@ public class RidesRetrievalAugmentor implements Supplier<RetrievalAugmentor> {
     private final RetrievalAugmentor retrievalAugmentor;
 
     public RidesRetrievalAugmentor(final ChromaEmbeddingStore store,
-                                   @Named("ollama")
+                                   @Named("ollamaEmb")
                                    final EmbeddingModel model) {
         EmbeddingStoreContentRetriever contentRetriever =
                  EmbeddingStoreContentRetriever.builder()
