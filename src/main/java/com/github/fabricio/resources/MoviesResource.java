@@ -3,12 +3,14 @@ package com.github.fabricio.resources;
 import com.github.fabricio.buscasemantica.MovieDto;
 import com.github.fabricio.entities.Movie;
 import com.github.fabricio.services.EmbeddingCalculator;
+import com.github.fabricio.services.GraphProducer;
 import com.github.fabricio.services.MoviesParserService;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Path("/movies/api")
 public class MoviesResource {
@@ -27,6 +30,9 @@ public class MoviesResource {
 
     @Inject
     EmbeddingCalculator embeddingCalculator;
+
+    @Inject
+    GraphProducer graphProducer;
 
     @Startup
     @Transactional
@@ -46,5 +52,13 @@ public class MoviesResource {
         return movies.stream()
                 .map(m -> new MovieApiDto(m.title, m.plot, m.director, m.rating))
                 .toList();
+    }
+
+    @POST
+    @Path("/test")
+    public void send(@QueryParam("question") final String question) throws Exception {
+        var graph = graphProducer.buildGraph();
+        var finalState = graph.invoke(Map.of("question", question));
+        IO.println(finalState.get().generation());
     }
 }

@@ -1,6 +1,5 @@
 package com.github.fabricio.services;
 
-import com.github.fabricio.configuration.RidesRetrievalAugmentor;
 import com.github.fabricio.queryrouter.RidesRetrievalArgumentor;
 import com.github.fabricio.repositories.RideRepository;
 import dev.langchain4j.service.MemoryId;

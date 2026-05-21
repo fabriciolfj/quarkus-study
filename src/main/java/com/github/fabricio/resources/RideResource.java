@@ -91,4 +91,18 @@ public class RideResource {
         ingestor.ingest(documents);
         System.out.println("ingeriu");
     }
+
+    public void ingestMovies(@Observes StartupEvent startupEvent) {
+        var documents = documentFromText.createDocuments(Paths.get("./futuro"));
+
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor
+                .builder()
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .documentSplitter(recursive(300, 30))
+                .build();
+
+        ingestor.ingest(documents);
+        System.out.println("ingeriu");
+    }
 }
